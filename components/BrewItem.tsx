@@ -1,36 +1,51 @@
-import React, { useState } from "react";
-import brewItemRatingState from "../atoms/brewItemRatingState";
+import React, { useState, useEffect} from "react";
 import { useRecoilState } from "recoil";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import brewListState from "../atoms/brewListState";
+import { Brew } from "./BrewList";
+import brewWithId from "../atoms/brewWithId";
 
 type BrewItemProps = {
+  brewId: string;
   name: string;
   brewery: string;
-  style: string;
   rating: number;
+  style: string;
 };
 
-function replaceItemAtIndex(arr, index, newValue) {
-  return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
-}
+// function replaceItemAtIndex(arr, index, newValue) {
+//   return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
+// }
 
-const BrewItem = ({ name, brewery, style, rating }: BrewItemProps) => {
-  const [brews, setBrewList] = useRecoilState(brewListState);
-  const index = brews.findIndex((brew) => brew.name === name);
-  const updateRating = (newRating) => {
+const BrewItem = React.memo(({ brewId, name, brewery, rating, style }: BrewItemProps) => {
+  const defaultState: Brew = {
+    name,
+    brewery,
+    rating,
+    style,
+  };
+  const [brew, setBrewItem] = useRecoilState<Brew>(brewWithId(brewId));
+  useEffect(() => {
+    setBrewItem({
+      name,
+      brewery,
+      rating,
+      style,
+    });
+  }, []);
+  const updateRating = (newRating: number) => {
     const updatedBrew = {
-      ...brews[index],
+      ...brew,
       rating: newRating,
     };
-    const newBrewList = replaceItemAtIndex(brews, index, updatedBrew);
-    setBrewList(newBrewList);
+    setBrewItem(updatedBrew);
+    // const newBrewList = replaceItemAtIndex(brews, index, updatedBrew);
+    // setBrewList(newBrewList);
   };
   const handleIncrease = () => {
-    updateRating(rating + 1);
+    updateRating(brew.rating + 1);
   };
   const handleDecrease = () => {
-    updateRating(rating - 1);
+    updateRating(brew.rating - 1);
   };
   return (
     <>
@@ -38,26 +53,26 @@ const BrewItem = ({ name, brewery, style, rating }: BrewItemProps) => {
         <Image style={styles.image} />
         <View style={styles.infoContainer}>
           <View style={styles.infoGroup}>
-            <Text>{name}</Text>
-            <Text>{brewery}</Text>
+            <Text>{brew.name}</Text>
+            <Text>{brew.brewery}</Text>
           </View>
           <View style={styles.infoGroup}>
-            <Text>{style}</Text>
-            <Text>{rating}/5</Text>
+            <Text>{brew.style}</Text>
+            <Text>{brew.rating}/5</Text>
           </View>
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity disabled={rating >= 5} onPress={handleIncrease}>
+        <TouchableOpacity disabled={brew.rating >= 5} onPress={handleIncrease}>
           <Text style={styles.buttonText}> + </Text>
         </TouchableOpacity>
-        <TouchableOpacity disabled={rating <= 0} onPress={handleDecrease}>
+        <TouchableOpacity disabled={brew.rating <= 0} onPress={handleDecrease}>
           <Text style={styles.buttonText}> - </Text>
         </TouchableOpacity>
       </View>
     </>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
