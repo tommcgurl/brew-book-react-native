@@ -1,8 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { atom, selector, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 import BREWS from '../constants/Brews';
+import brewListState from '../atoms/brewListState';
 import BrewItem from "./BrewItem";
 import AverageRating from "./AverageRating";
 
@@ -13,10 +14,9 @@ export type Brew = {
   style: string;
 };
 
-
 const BrewList = () => {
-  // const [brews, setBrewList] = useRecoilState(brewListState);
-  const data = Object.entries(BREWS).map(
+  const [brews, setBrewList] = useRecoilState(brewListState);
+  const data = Object.entries(brews).map(
     ([brewId, brewInfo]: [string, Brew]) => {
       return {
         brewId,
