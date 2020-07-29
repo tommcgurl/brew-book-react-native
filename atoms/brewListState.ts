@@ -1,6 +1,17 @@
 import { atom } from "recoil";
 
-const fallbackBrews = {
+export type Brew = {
+  name: string;
+  brewery: string;
+  rating: number;
+  style: string;
+};
+
+export type BrewMap = {
+  [id: string]: Brew;
+}
+
+const fallbackBrews: BrewMap = {
   "carton-brewing-boat": {
     name: "Boat",
     brewery: "Carton Brewing",
@@ -38,13 +49,10 @@ const fallbackBrews = {
     style: "Lager",
   },
 };
-const defaultBrewsString = localStorage.getItem("brews");
-const defaultBrews = defaultBrewsString
-  ? JSON.parse(defaultBrewsString)
-  : fallbackBrews;
+
 const brewListState = atom({
   key: "brewListState",
-  default: defaultBrews,
+  default: fallbackBrews,
 });
 
 export default brewListState;

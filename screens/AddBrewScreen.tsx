@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import { Text, View } from "../components/Themed";
 import { TextInput, TouchableHighlight } from "react-native-gesture-handler";
 import brewListState from "../atoms/brewListState";
-import perisistState from "../utils/persistState";
+import { persistState } from "../utils/persistedState";
 
 type AddBrewScreenProps = {
   // TODO: fix this type.
@@ -47,13 +47,12 @@ export default function AddBrewScreen({ navigation }: AddBrewScreenProps) {
       [brewId]: newBrew,
     };
     setBrewList(newBrews);
-    perisistState('brews', newBrews);
+    persistState("brews", newBrews);
     clearInputs();
     navigation.navigate("AllBrewsScreen");
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Brew</Text>
       <View style={styles.formContainer}>
         <TextInput
           value={brewName}

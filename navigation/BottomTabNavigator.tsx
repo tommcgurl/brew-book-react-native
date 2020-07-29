@@ -17,19 +17,24 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+    >
       <BottomTab.Screen
         name="Brews"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
         name="Add Brew"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>
@@ -52,7 +57,7 @@ function TabOneNavigator() {
       <TabOneStack.Screen
         name="AllBrewsScreen"
         component={AllBrewsScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{ headerTitle: 'My Brews' }}
       />
     </TabOneStack.Navigator>
   );
@@ -66,7 +71,7 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="AddBrewScreen"
         component={AddBrewScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Add Brew' }}
       />
     </TabTwoStack.Navigator>
   );

@@ -53,7 +53,7 @@ const BrewItem = React.memo(({ brewId, name, brewery, rating, style }: BrewItemP
         <Image style={styles.image} />
         <View style={styles.infoContainer}>
           <View style={styles.infoGroup}>
-            <Text>{brew.name}</Text>
+            <Text style={styles.brewName}>{brew.name}</Text>
             <Text>{brew.brewery}</Text>
           </View>
           <View style={styles.infoGroup}>
@@ -76,25 +76,27 @@ const BrewItem = React.memo(({ brewId, name, brewery, rating, style }: BrewItemP
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-around",
     borderWidth: 1,
     borderColor: "#CBCBCB",
     borderStyle: "solid",
+    padding: 12,
   },
   image: {
     height: 50,
     width: 50,
     borderRadius: 50,
-    backgroundColor: "tomato",
+    backgroundColor: "#CCC",
   },
   infoContainer: {
-    flex: 1,
+    flex: 0.9,
   },
   infoGroup: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingVertical: 4,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -103,6 +105,9 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 34,
   },
+  brewName: {
+    fontSize: 16,
+  }
 });
 
 export default BrewItem;
