@@ -35,7 +35,8 @@
     "react-native-web": "~0.11.7",
     "recoil": "0.0.10",
     "@react-native-community/async-storage": "~1.11.0",
-    "expo-linear-gradient": "~8.2.1"
+    "expo-linear-gradient": "~8.2.1",
+    "expo-image-picker": "~8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

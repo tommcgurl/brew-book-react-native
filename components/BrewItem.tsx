@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { useRecoilState } from "recoil";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { Brew } from "./BrewList";
+import { Brew, BrewImage } from '../atoms/brewListState'
 import brewWithId from "../atoms/brewWithId";
 
 type BrewItemProps = {
@@ -10,18 +10,20 @@ type BrewItemProps = {
   brewery: string;
   rating: number;
   style: string;
+  brewImage?: BrewImage;
 };
 
 // function replaceItemAtIndex(arr, index, newValue) {
 //   return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
 // }
 
-const BrewItem = React.memo(({ brewId, name, brewery, rating, style }: BrewItemProps) => {
+const BrewItem = React.memo(({ brewId, name, brewery, rating, style, brewImage }: BrewItemProps) => {
   const defaultState: Brew = {
     name,
     brewery,
     rating,
     style,
+    brewImage,
   };
   const [brew, setBrewItem] = useRecoilState<Brew>(brewWithId(brewId));
   useEffect(() => {
@@ -50,7 +52,7 @@ const BrewItem = React.memo(({ brewId, name, brewery, rating, style }: BrewItemP
   return (
     <>
       <View style={styles.container}>
-        <Image style={styles.image} />
+        <Image source={{uri: brewImage?.localURI}} style={styles.image} />
         <View style={styles.infoContainer}>
           <View style={styles.infoGroup}>
             <Text style={styles.brewName}>{brew.name}</Text>

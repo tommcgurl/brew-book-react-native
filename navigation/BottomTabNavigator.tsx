@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
@@ -17,14 +17,20 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+      tabBarOptions={{
+        activeTintColor: Colors[colorScheme].tabIconSelected,
+        inactiveTintColor: Colors[colorScheme].tabIconDefault,
+        style: {
+          backgroundColor: Colors[colorScheme].brandOrange,
+        },
+      }}
     >
       <BottomTab.Screen
         name="Brews"
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="beer" color={color} />
           ),
         }}
       />
@@ -33,7 +39,7 @@ export default function BottomTabNavigator() {
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="plus-circle" color={color} />
           ),
         }}
       />
@@ -44,7 +50,7 @@ export default function BottomTabNavigator() {
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
 function TabBarIcon(props: { name: string; color: string }) {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <MaterialCommunityIcons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
@@ -57,7 +63,12 @@ function TabOneNavigator() {
       <TabOneStack.Screen
         name="AllBrewsScreen"
         component={AllBrewsScreen}
-        options={{ headerTitle: 'My Brews' }}
+        options={{
+          headerTitle: "My Brews",
+          headerStyle: {
+            backgroundColor: "#FAD571",
+          },
+        }}
       />
     </TabOneStack.Navigator>
   );
