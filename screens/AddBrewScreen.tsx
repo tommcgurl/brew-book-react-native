@@ -10,13 +10,16 @@ import { Text, View } from "../components/Themed";
 import { TextInput, TouchableHighlight } from "react-native-gesture-handler";
 import brewListState, { Brew, BrewImage } from "../atoms/brewListState";
 import { persistState } from "../utils/persistedState";
+import ImagePickerModal from "../components/ImagePickerModal";
 
 type AddBrewScreenProps = {
   // TODO: fix this type.
   navigation: any;
 };
 
-
+type ImagePickerFunction = (
+  options?: ImagePicker.ImagePickerOptions | undefined
+) => Promise<ImagePicker.ImagePickerResult>;
 
 export default function AddBrewScreen({ navigation }: AddBrewScreenProps) {
   const colorScheme = useColorScheme();
@@ -25,6 +28,7 @@ export default function AddBrewScreen({ navigation }: AddBrewScreenProps) {
   const [style, setStyle] = useState("");
   const [brewImage, setBrewImage] = useState<BrewImage>();
   const [brewImageLoading, setBrewImageLoading] = useState(false);
+  const [imagePickerModalShowing, setImagePickerModalShowing] = useState(false);
   const [brews, setBrewList] = useRecoilState(brewListState);
   const handleBrewNameChange = (newText: string) => {
     setBrewName(newText);
@@ -43,15 +47,15 @@ export default function AddBrewScreen({ navigation }: AddBrewScreenProps) {
     setBrewImageLoading(false);
   };
 
-  let handleClickAddImage = async () => {
-    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+  const handleClickAddImage = () => {
+    setImagePickerModalShowing(true);
+  }
 
-    if (permissionResult.granted === false) {
-      alert("Permission to access camera roll is required!");
-      return;
-    }
+  const handleAddImage = async (imagePickerFunction: ImagePickerFunction) => {
     setBrewImageLoading(true);
-    let { width, height, uri, cancelled } = await ImagePicker.launchImageLibraryAsync();
+    let { width, height, uri, cancelled } = await imagePickerFunction({
+      allowsEditing: true,
+    });
     if (!cancelled) {
       setBrewImage({
         width,
@@ -60,6 +64,24 @@ export default function AddBrewScreen({ navigation }: AddBrewScreenProps) {
       });
     }
     setBrewImageLoading(false);
+    setImagePickerModalShowing(false);
+  };
+
+  const handleUseCamera = async () => {
+    let cameraPermissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (cameraPermissionResult.granted === false) {
+      alert("Permission to access camera is required!");
+      return;
+    }
+    handleAddImage(ImagePicker.launchCameraAsync);
+  };
+  const handleUseCameraRoll = async () => {
+    let imageLibraryPermissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (imageLibraryPermissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    handleAddImage(ImagePicker.launchImageLibraryAsync);
   };
 
   const handleAddBrew = () => {
@@ -81,9 +103,20 @@ export default function AddBrewScreen({ navigation }: AddBrewScreenProps) {
     clearInputs();
     navigation.navigate("AllBrewsScreen");
   };
+
+  const handleModalClose = () =>{
+    setImagePickerModalShowing(false)
+  }
   const buttonEnabled = brewName && brewery && style;
   return (
     <View style={styles.container}>
+      <ImagePickerModal
+        modalVisible={imagePickerModalShowing}
+        handleClickUseCamera={handleUseCamera}
+        handleClickUseCameraRoll={handleUseCameraRoll}
+        onRequestClose={handleModalClose}
+        onDismiss={handleModalClose}
+      />
       <View style={styles.formContainer}>
         <TextInput
           value={brewName}
