@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRecoilState } from "recoil";
 import { getPersistedState } from "../utils/persistedState";
-import brewListState, { Brew, BrewMap } from "../atoms/brewListState";
+import brewListState  from "../atoms/brewListState";
+import { Brew, BrewMap } from '../types';
 import BrewItem from "./BrewItem";
 import AverageRating from "./AverageRating";
 
@@ -36,6 +37,7 @@ const BrewList = () => {
         {data.length ? (
           <FlatList
             data={data}
+            keyExtractor={(item, index) => item.brewId}
             renderItem={({ item }) => (
               <BrewItem
                 key={item.brewId}
@@ -52,10 +54,12 @@ const BrewList = () => {
         {!data.length ? (
           <View style={styles.emptyMessageContainer}>
             <Text style={styles.emptyMessageText}>
-              {"The brews you add will be displayed here! Trying adding you first brew!"}
+              {
+                "The brews you add will be displayed here! Trying adding you first brew!"
+              }
             </Text>
           </View>
-        ): null}
+        ) : null}
       </View>
     </LinearGradient>
   );

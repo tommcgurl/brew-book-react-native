@@ -18,13 +18,6 @@ type BrewItemProps = {
 // }
 
 const BrewItem = React.memo(({ brewId, name, brewery, rating, style, brewImage }: BrewItemProps) => {
-  const defaultState: Brew = {
-    name,
-    brewery,
-    rating,
-    style,
-    brewImage,
-  };
   const [brew, setBrewItem] = useRecoilState<Brew>(brewWithId(brewId));
   useEffect(() => {
     setBrewItem({
@@ -34,21 +27,6 @@ const BrewItem = React.memo(({ brewId, name, brewery, rating, style, brewImage }
       style,
     });
   }, []);
-  const updateRating = (newRating: number) => {
-    const updatedBrew = {
-      ...brew,
-      rating: newRating,
-    };
-    setBrewItem(updatedBrew);
-    // const newBrewList = replaceItemAtIndex(brews, index, updatedBrew);
-    // setBrewList(newBrewList);
-  };
-  const handleIncrease = () => {
-    updateRating(brew.rating + 1);
-  };
-  const handleDecrease = () => {
-    updateRating(brew.rating - 1);
-  };
   return (
     <>
       <View style={styles.container}>
@@ -64,14 +42,6 @@ const BrewItem = React.memo(({ brewId, name, brewery, rating, style, brewImage }
           </View>
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity disabled={brew.rating >= 5} onPress={handleIncrease}>
-          <Text style={styles.buttonText}> + </Text>
-        </TouchableOpacity>
-        <TouchableOpacity disabled={brew.rating <= 0} onPress={handleDecrease}>
-          <Text style={styles.buttonText}> - </Text>
-        </TouchableOpacity>
-      </View>
     </>
   );
 });
@@ -81,7 +51,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: "#CBCBCB",
     borderStyle: "solid",
     padding: 12,
